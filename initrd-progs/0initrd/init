@@ -55,6 +55,10 @@ L_SFFS_ERROR="ERROR: savefile filesystem is not ext2/3/4"
 
 ##############################################################
 
+# pfix (kernel argument) parsing is much later.
+# Here is a dirty parse to enable one particular feature.
+echo ",$pfix," | grep -qF ",trace," && set -x
+
 /sbin/usablefs # mount: /proc /sys /dev / (proc sysfs devtmpfs rootfs)
 
 for i in $(cat /proc/cmdline) ; do
@@ -824,12 +828,15 @@ PDEBUG=1
 TOTAL_SIZEK_SFS_RAM=0
 
 RDSH=""
+TRACE=""
+
 if [ "$pfix" ];then
  for ONEFIX in $(echo -n "$pfix" | tr ',' ' ')
  do
   case $ONEFIX in
    ram)     PRAMONLY="yes";;      #run in ram only (do not load ${DISTRO_FILE_PREFIX}save).
    rdsh)    RDSH="yes";;          #exit to shell in initial ramdisk.
+   trace)   TRACE="yes";;         #continue booting with shell option -x set.  Makes a big, messy bootinit.txt.
    xorgwizard) PXORGWIZARD="yes";;#force xorgwizard for this session
    nox)     PNOX="yes";;          #do not start X.
    clean)   PCLEAN="yes";;        #force version upgrade and cleanup.
@@ -842,6 +849,15 @@ if [ "$pfix" ];then
    *)       echo "pfix=$ONEFIX is not a known boot parameter";;
   esac
  done
+fi
+
+if [ "$TRACE" = "yes" ]; then
+  if echo "$-" | grep -qF 'x' ; then
+    # pfix asked for tracing and there is tracing, so do nothing
+    :
+  else
+    echo "WARNING: pfix asked for tracing (set -x), and it is now off, so something deserves an investigation."
+  fi
 fi
 
 export PFSCK # read by /sbin/load_ext_file
