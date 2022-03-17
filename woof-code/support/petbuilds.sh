@@ -11,8 +11,8 @@ fi
 WOOF_CC="/usr/bin/ccache gcc"
 WOOF_CXX="/usr/bin/ccache g++"
 
-WOOF_CFLAGS="$WOOF_CFLAGS -Os -fomit-frame-pointer -ffunction-sections -fdata-sections -fmerge-all-constants"
-WOOF_CXXFLAGS="$WOOF_CXXFLAGS -Os -fomit-frame-pointer -ffunction-sections -fdata-sections -fmerge-all-constants"
+WOOF_CFLAGS="$WOOF_CFLAGS -O2 -fomit-frame-pointer -ffunction-sections -fdata-sections -fmerge-all-constants"
+WOOF_CXXFLAGS="$WOOF_CXXFLAGS -O2 -fomit-frame-pointer -ffunction-sections -fdata-sections -fmerge-all-constants"
 WOOF_LDFLAGS="$WOOF_LDFLAGS -Wl,--gc-sections -Wl,--sort-common -Wl,-s"
 
 MAKEFLAGS=-j`nproc`
@@ -26,22 +26,27 @@ if [ "$WOOF_HOSTARCH" = "x86_64" -a "$WOOF_TARGETARCH" = "x86" ]; then
     CHROOT_PFIX=linux32
 fi
 
-PETBUILD_GTK=2
-if [ "$DISTRO_TARGETARCH" = "x86" ]; then
-    echo "Using GTK+ 2 for x86 petbuilds"
-else
-    GTK3_PC=`find ../packages-${DISTRO_FILE_PREFIX} -name gtk+-3.0.pc | head -n 1`
-    if [ -n "$GTK3_PC" ]; then
-        GTK3_VER=`awk '/Version:/{print $2}' "${GTK3_PC}"`
-        vercmp "$GTK3_VER" ge 3.24.18
-        if [ $? -eq 0 ]; then
-            echo "Using GTK+ 3 for petbuilds"
-            PETBUILD_GTK=3
-        else
-            echo "Using GTK+ 2 for petbuilds, GTK+ 3 is too old"
-        fi
+if [ -z "$PETBUILD_GTK" ]; then
+    echo "WARNING: PETBUILD_GTK is empty, this may be a hard error in the future"
+    [ -n "$GITHUB_ACTIONS" ] && exit 1
+
+    PETBUILD_GTK=2
+    if [ "$DISTRO_TARGETARCH" = "x86" ]; then
+        echo "Using GTK+ 2 for x86 petbuilds"
     else
-        echo "Using GTK+ 2 for petbuilds, GTK+ 3 is missing"
+        GTK3_PC=`find ../packages-${DISTRO_FILE_PREFIX} -name gtk+-3.0.pc | head -n 1`
+        if [ -n "$GTK3_PC" ]; then
+            GTK3_VER=`awk '/Version:/{print $2}' "${GTK3_PC}"`
+            vercmp "$GTK3_VER" ge 3.24.18
+            if [ $? -eq 0 ]; then
+                echo "Using GTK+ 3 for petbuilds"
+                PETBUILD_GTK=3
+            else
+                echo "Using GTK+ 2 for petbuilds, GTK+ 3 is too old"
+            fi
+        else
+            echo "Using GTK+ 2 for petbuilds, GTK+ 3 is missing"
+        fi
     fi
 fi
 
@@ -60,18 +65,25 @@ for NAME in $PETBUILDS; do
             rm -f sh petbuild-rootfs-complete/bin/sh
             ln -s bash petbuild-rootfs-complete/bin/sh
 
+            cp -f /etc/resolv.conf petbuild-rootfs-complete/etc/
+            cp -f ../packages-templates/ca-certificates/pinstall.sh petbuild-rootfs-complete/
+            chroot petbuild-rootfs-complete sh /pinstall.sh
+            rm -f petbuild-rootfs-complete/pinstall.sh
+
             # to speed up compilation, we build a static, native ccache executable
-            if [ $CROSSBUILD -eq 1 -o ! -e devx/usr/bin/ccache ]; then
-                if [ ! -f ../petbuild-cache/ccache ]; then
-                    wget -t 1 -T 15 https://github.com/ccache/ccache/releases/download/v3.7.12/ccache-3.7.12.tar.xz
-                    tar -xJf ccache-3.7.12.tar.xz
-                    cd ccache-3.7.12
-                    CFLAGS=-O3 LDFLAGS="-static -Wl,-s" ./configure
-                    MAKEFLAGS="$MAKEFLAGS" make
-                    install -D -m 755 ccache ../../petbuild-cache/ccache
-                    cd ..
+            if [ "$BUILD_DEVX" = "yes" ]; then
+                if [ $CROSSBUILD -eq 1 -o ! -e devx/usr/bin/ccache ]; then
+                    if [ ! -f ../petbuild-cache/ccache ]; then
+                        wget -t 1 -T 15 https://github.com/ccache/ccache/releases/download/v3.7.12/ccache-3.7.12.tar.xz
+                        tar -xJf ccache-3.7.12.tar.xz
+                        cd ccache-3.7.12
+                        CFLAGS=-O3 LDFLAGS="-static -Wl,-s" ./configure
+                        MAKEFLAGS="$MAKEFLAGS" make
+                        install -D -m 755 ccache ../../petbuild-cache/ccache
+                        cd ..
+                    fi
+                    install -m 755 ../petbuild-cache/ccache petbuild-rootfs-complete/usr/bin/ccache
                 fi
-                install -m 755 ../petbuild-cache/ccache petbuild-rootfs-complete/usr/bin/ccache
             fi
 
             # speed up configure scripts by using a native shell executable and a native busybox
@@ -91,10 +103,10 @@ for NAME in $PETBUILDS; do
                 ln -s bash petbuild-rootfs-complete/bin/sh
 
                 if [ ! -f ../petbuild-cache/busybox ]; then
-                    wget -t 1 -T 15 https://busybox.net/downloads/busybox-1.33.1.tar.bz2
-                    tar -xjf busybox-1.33.1.tar.bz2
-                    cp -f ../rootfs-petbuilds/busybox/DOTconfig busybox-1.33.1/.config
-                    cd busybox-1.33.1
+                    wget -t 1 -T 15 https://busybox.net/downloads/busybox-1.35.0.tar.bz2
+                    tar -xjf busybox-1.35.0.tar.bz2
+                    cp -f ../rootfs-petbuilds/busybox/DOTconfig busybox-1.35.0/.config
+                    cd busybox-1.35.0
                     make CONFIG_STATIC=y
                     install -D -m 755 busybox ../../petbuild-cache/busybox || exit 1
                     cd ..
@@ -108,7 +120,7 @@ for NAME in $PETBUILDS; do
             chroot petbuild-rootfs-complete ldconfig
 
             # the shared-mime-info PET used by fossa64 doesn't put its pkg-config file in /usr/lib/x86_64-linux-gnu/pkgconfig
-            PKG_CONFIG_PATH=`dirname $(find petbuild-rootfs-complete devx -name '*.pc') | sed -e s/^petbuild-rootfs-complete//g -e s/^devx//g | sort | uniq | tr '\n' :`
+            PKG_CONFIG_PATH=`dirname $(find petbuild-rootfs-complete devx -name '*.pc' 2>/dev/null) 2>/dev/null | sed -e s/^petbuild-rootfs-complete//g -e s/^devx//g | sort | uniq | tr '\n' :`
 
             HAVE_ROOTFS=1
         fi
@@ -146,22 +158,32 @@ for NAME in $PETBUILDS; do
 
         cd $HERE
 
+        rm -rf ../petbuild-output/${NAME}-* # remove older petbuilds of $NAME
         mkdir -p ../petbuild-output/${NAME}-${HASH} petbuild-rootfs-complete-${NAME}
-        mount -t aufs -o br=../petbuild-output/${NAME}-${HASH}:devx:petbuild-rootfs-complete petbuild petbuild-rootfs-complete-${NAME}
+        [ "$BUILD_DEVX" = "yes" ] && LOWERDIR='devx:petbuild-rootfs-complete' || LOWERDIR='petbuild-rootfs-complete'
+        if [ "$LAYER_TYPE" = 'overlay' ]; then
+             mkdir petbuild-workdir
+             mount -t overlay -o upperdir=../petbuild-output/${NAME}-${HASH},lowerdir=${LOWERDIR},workdir=petbuild-workdir petbuild petbuild-rootfs-complete-${NAME}
+        else
+             mount -t aufs -o br=../petbuild-output/${NAME}-${HASH}:${LOWERDIR} petbuild petbuild-rootfs-complete-${NAME}
+        fi
 
         mkdir -p petbuild-rootfs-complete-${NAME}/proc petbuild-rootfs-complete-${NAME}/sys petbuild-rootfs-complete-${NAME}/dev petbuild-rootfs-complete-${NAME}/tmp
-        mkdir -p petbuild-rootfs-complete-${NAME}/root/.ccache
+        mkdir -p petbuild-rootfs-complete-${NAME}/root/.ccache petbuild-rootfs-complete-${NAME}/root/.cache
         mount --bind /proc petbuild-rootfs-complete-${NAME}/proc
         mount --bind /sys petbuild-rootfs-complete-${NAME}/sys
         mount --bind /dev petbuild-rootfs-complete-${NAME}/dev
         mount -t tmpfs -o size=1G petbuild-tmp-${NAME} petbuild-rootfs-complete-${NAME}/tmp
         mkdir -p ../petbuild-cache/.ccache
         mount --bind ../petbuild-cache/.ccache petbuild-rootfs-complete-${NAME}/root/.ccache
+        mkdir -p ../petbuild-cache/.cache
+        mount --bind ../petbuild-cache/.cache petbuild-rootfs-complete-${NAME}/root/.cache
 
         cp -a ../petbuild-sources/${NAME}/* petbuild-rootfs-complete-${NAME}/tmp/
         cp -a ../rootfs-petbuilds/${NAME}/* petbuild-rootfs-complete-${NAME}/tmp/
-        CC="$WOOF_CC" CXX="$WOOF_CXX" CFLAGS="$WOOF_CFLAGS" CXXFLAGS="$WOOF_CXXFLAGS" LDFLAGS="$WOOF_LDFLAGS" MAKEFLAGS="$MAKEFLAGS" CCACHE_DIR=/root/.ccache CCACHE_NOHASHDIR=1 PKG_CONFIG_PATH="$PKG_CONFIG_PATH" PYTHONDONTWRITEBYTECODE=1 PETBUILD_GTK=$PETBUILD_GTK $CHROOT_PFIX chroot petbuild-rootfs-complete-${NAME} bash -ec "cd /tmp && . ./petbuild && build"
+        CC="$WOOF_CC" CXX="$WOOF_CXX" CFLAGS="$WOOF_CFLAGS" CXXFLAGS="$WOOF_CXXFLAGS" LDFLAGS="$WOOF_LDFLAGS" MAKEFLAGS="$MAKEFLAGS" CCACHE_DIR=/root/.ccache CCACHE_NOHASHDIR=1 PKG_CONFIG_PATH="$PKG_CONFIG_PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONPYCACHEPREFIX=/root/.cache/__pycache__ PETBUILD_GTK=$PETBUILD_GTK $CHROOT_PFIX chroot petbuild-rootfs-complete-${NAME} bash -ec "cd /tmp && . ./petbuild && build"
         ret=$?
+        umount -l petbuild-rootfs-complete-${NAME}/root/.cache
         umount -l petbuild-rootfs-complete-${NAME}/root/.ccache
         umount -l petbuild-rootfs-complete-${NAME}/tmp
         umount -l petbuild-rootfs-complete-${NAME}/dev
@@ -170,6 +192,9 @@ for NAME in $PETBUILDS; do
         umount -l petbuild-rootfs-complete-${NAME}
         rmdir petbuild-rootfs-complete-${NAME}
 
+        clean_out_whiteouts ../petbuild-output/${NAME}-${HASH}
+        rm -rf petbuild-workdir
+
         if [ $ret -ne 0 ]; then
             echo "ERROR: failed to build ${NAME}"
             rm -rf ../petbuild-output/${NAME}-${HASH}
@@ -177,22 +202,25 @@ for NAME in $PETBUILDS; do
             exit 1
         fi
 
+        rm -rf ../petbuild-output/${NAME}-${HASH}/root/.cache
         rm -rf ../petbuild-output/${NAME}-${HASH}/root/.ccache
+        rm -rf ../petbuild-output/${NAME}-${HASH}/var/cache
         rm -rf ../petbuild-output/${NAME}-${HASH}/tmp
         rm -rf ../petbuild-output/${NAME}-${HASH}/etc/ssl
         rm -f ../petbuild-output/${NAME}-${HASH}/etc/resolv.conf
+        rm -f ../petbuild-output/${NAME}-${HASH}/etc/ld.so.cache
         rm -f ../petbuild-output/${NAME}-${HASH}/root/.wget-hsts
 
         rm -rf ../petbuild-output/${NAME}-${HASH}/usr/share/man
         rm -rf ../petbuild-output/${NAME}-${HASH}/usr/share/info
         rm -f ../petbuild-output/${NAME}-${HASH}/usr/share/icons/hicolor/icon-theme.cache
+        rm -rf ../petbuild-output/${NAME}-${HASH}/usr/lib/python*
         rm -rf ../petbuild-output/${NAME}-${HASH}/lib/pkgconfig
         rm -rf ../petbuild-output/${NAME}-${HASH}/usr/lib/pkgconfig
         rm -rf ../petbuild-output/${NAME}-${HASH}/usr/share/pkgconfig
         rm -rf ../petbuild-output/${NAME}-${HASH}/usr/include
 
         find ../petbuild-output/${NAME}-${HASH} -name '.wh*' -delete
-        find ../petbuild-output/${NAME}-${HASH} -name '.git*' -delete
         find ../petbuild-output/${NAME}-${HASH} -name '*.a' -delete
         find ../petbuild-output/${NAME}-${HASH} -name '*.la' -delete
 
@@ -204,6 +232,9 @@ for NAME in $PETBUILDS; do
                 for SO in `ls ../petbuild-output/${NAME}-${HASH}/${LIBDIR}/*.so* 2>/dev/null`; do
                     mv -f $SO ../petbuild-output/${NAME}-${HASH}/${LIBDIR}64/
                 done
+                if [ -d ../petbuild-output/${NAME}-${HASH}/${LIBDIR}/gio ]; then
+                    mv -f ../petbuild-output/${NAME}-${HASH}/${LIBDIR}/gio ../petbuild-output/${NAME}-${HASH}/${LIBDIR}64/
+                fi
                 rmdir ../petbuild-output/${NAME}-${HASH}/${LIBDIR} 2>/dev/null
             done
             ;;
@@ -216,6 +247,9 @@ for NAME in $PETBUILDS; do
                     for SO in `ls ../petbuild-output/${NAME}-${HASH}${PFIX}/${LIBDIR}/*.so* 2>/dev/null`; do
                         mv -f $SO ../petbuild-output/${NAME}-${HASH}${PFIX}/lib/${ARCHDIR}/
                     done
+                    if [ -d ../petbuild-output/${NAME}-${HASH}${PFIX}/${LIBDIR}/gio ]; then
+                        mv -f ../petbuild-output/${NAME}-${HASH}${PFIX}/${LIBDIR}/gio ../petbuild-output/${NAME}-${HASH}${PFIX}/lib/${ARCHDIR}/
+                    fi
                     rmdir ../petbuild-output/${NAME}-${HASH}${PFIX}/${LIBDIR}/${ARCHDIR} 2>/dev/null
                     rmdir ../petbuild-output/${NAME}-${HASH}${PFIX}/${LIBDIR} 2>/dev/null
                 done
@@ -241,6 +275,8 @@ for NAME in $PETBUILDS; do
             *) cp -a $EXTRAFILE ../petbuild-output/${NAME}-${HASH}/
             esac
         done
+
+        find ../petbuild-output/${NAME}-${HASH} -name '.git*' -delete
     fi
 
     rm -f ../petbuild-output/${NAME}-latest
@@ -283,11 +319,16 @@ for NAME in $PKGS; do
     cat ../packages-${DISTRO_FILE_PREFIX}/${NAME}/pet.specs >> /tmp/petbuild-output.specs
 
     # redirect packages with menu entries to adrv, with exceptions
-    if [ -n "$ADRV_INC" ] && [ "$NAME" != "rox-filer" ] && [ "$NAME" != "lxterminal" ] && [ "$NAME" != "leafpad" ] && [ "$NAME" != "l3afpad" ] && [ "$NAME" != "gexec" ] && [ -n "`ls ../packages-${DISTRO_FILE_PREFIX}/${NAME}/usr/share/applications/*.desktop 2>/dev/null`" ]; then
-        ADRV_INC="$ADRV_INC $NAME"
-    elif [ -n "$MAINPKGS" ]; then
+    COPY=1
+    for DRVPKG in $ADRV_INC $YDRV_INC $FDRV_INC; do
+        [ "$DRVPKG" != "$NAME" ] && continue
+        COPY=0
+        break
+    done
+
+    if [ $COPY -eq 1 -a -n "$MAINPKGS" ]; then
         MAINPKGS="$MAINPKGS $NAME"
-    else
+    elif [ $COPY -eq 1 ]; then
         MAINPKGS="$NAME"
     fi
 done

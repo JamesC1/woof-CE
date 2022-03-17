@@ -51,6 +51,18 @@ for I in 1 2 3 4; do
 		grep -vF '_hybrid</Include>' root/.jwm/jwmrc-tray$I | sed -e 's%autohide="\(top\|bottom\|left\|right\)" %autohide="off"%' -e "s%layer=\"above\"%layer=\"below\"%" > root/.jwm/jwmrc-tray${I}_hybrid
 	fi
 done
+
+cat << EOF > root/.jwm/jwmrc-wallpaper
+<?xml version="1.0"?>
+
+<JWM>
+
+<Desktops>
+	<Background type="image">/usr/share/backgrounds/${PTHEME_WALL}</Background>
+</Desktops>
+</JWM>
+EOF
+
 #---
 echo "$PTHEME_JWM_TRAY" > root/.jwm/tray_active_preset
 echo "jwm tray: ${PTHEME_JWM_TRAY}"
@@ -97,10 +109,21 @@ include "/root/.gtkrc-2.0.mine"
 
 # -- THEME AUTO-WRITTEN BY gtk-theme-switch2 DO NOT EDIT
 gtk-theme-name = "${PTHEME_GTK}"
+gtk-toolbar-style = GTK_TOOLBAR_BOTH
+gtk-toolbar-icon-size = GTK_ICON_SIZE_LARGE_TOOLBAR
 _EOF
 if [ -d usr/share/themes/${PTHEME_GTK}/gtk-3.0 ]; then
 	mkdir -p root/.config/gtk-3.0
 	cat > root/.config/gtk-3.0/settings.ini << _EOF
+[Settings]
+gtk-theme-name = ${PTHEME_GTK}
+gtk-toolbar-style = GTK_TOOLBAR_BOTH
+gtk-toolbar-icon-size = GTK_ICON_SIZE_LARGE_TOOLBAR
+_EOF
+fi
+if [ -d usr/share/themes/${PTHEME_GTK}/gtk-4.0 ]; then
+	mkdir -p root/.config/gtk-4.0
+	cat > root/.config/gtk-4.0/settings.ini << _EOF
 [Settings]
 gtk-theme-name = ${PTHEME_GTK}
 _EOF
@@ -129,6 +152,12 @@ gtk-button-images = 1
 gtk-enable-animations = 0
 EOF
 	fi
+	if [ -f root/.config/gtk-4.0/settings.ini ]; then
+		echo -e "gtk-icon-theme-name = $USE_ICON_THEME" >> root/.config/gtk-4.0/settings.ini
+		cat >> root/.config/gtk-4.0/settings.ini <<EOF
+gtk-enable-animations = 0
+EOF
+	fi
 	# then ROX
 	ROX_THEME_FILE="root/.config/rox.sourceforge.net/ROX-Filer/Options" # this could change in future
 	sed -i "s%<Option name=\"icon_theme\">.*%<Option name=\"icon_theme\">$USE_ICON_THEME</Option>%" $ROX_THEME_FILE
@@ -136,7 +165,14 @@ EOF
 fi
 
 install -D -m 644 root/.gtkrc-2.0 etc/gtk-2.0/gtkrc
-[ -f root/.config/gtk-3.0/settings.ini ] && install -D -m 644 root/.config/gtk-3.0/settings.ini etc/gtk-3.0/settings.ini
+if [ -f root/.config/gtk-3.0/settings.ini ]; then
+	install -D -m 644 root/.config/gtk-3.0/settings.ini etc/gtk-3.0/settings.ini
+	install -D -m 644 -o spot -g spot root/.config/gtk-3.0/settings.ini home/spot/.config/gtk-3.0/settings.ini
+fi
+if [ -f root/.config/gtk-4.0/settings.ini ]; then
+	install -D -m 644 root/.config/gtk-4.0/settings.ini etc/gtk-4.0/settings.ini
+	install -D -m 644 -o spot -g spot root/.config/gtk-4.0/settings.ini home/spot/.config/gtk-4.0/settings.ini
+fi
 
 ##### WALLPAPER #copy it as mv messes the themes
 ext="${PTHEME_WALL##*.}"

@@ -542,7 +542,7 @@ yes|libzip|libzip5,libzip-dev|exe,dev,doc,nls
 yes|libzstd|libzstd1,libzstd-dev|exe,dev,doc,nls
 yes|linux-header|linux-libc-dev|exe>dev,dev,doc,nls
 yes|lirc|liblircclient0,liblircclient-dev|exe,dev,doc,nls
-yes|ListDDF||exe,dev,doc,nls|
+yes|ListDD||exe,dev,doc,nls|
 yes|llvm-cut|libllvm10|exe,dev,doc,nls
 yes|lm-sensors|lm-sensors|exe,dev,doc,nls
 yes|lockstate||exe,dev,doc,nls
@@ -768,7 +768,7 @@ yes|trans-tray||exe,dev,doc,nls
 yes|tree|tree|exe,dev,doc,nls
 yes|ucf|ucf|exe,dev,doc,nls|
 yes|udev|udev,libudev1,libudev-dev|exe>null,dev>null,doc>null,nls>null #fake install
-no|eudev||exe,dev,doc,nls|pet:fossa64| #note, requires kmod and a kernel with devtmpfs enabled.
+yes|eudev||exe,dev,doc,nls|pet:fossa64| #note, requires kmod and a kernel with devtmpfs enabled.
 yes|uextract||exe,dev,doc,nls|
 yes|uget|uget|exe
 yes|unclutter|unclutter|exe,dev>null,doc,nls

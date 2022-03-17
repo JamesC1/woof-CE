@@ -33,7 +33,7 @@ no|aalib|libaa1|exe,dev>null,doc,nls #ascii library, needed by mplayer, gphoto
 yes|acl|libacl1|exe,dev,doc,nls||deps:yes
 no|acpi|acpi|exe,dev,doc,nls
 no|acpid-busibox||exe
-yes|adduser|adduser|exe>null,dev>null,doc>null,nls>null
+yes|adduser|adduser|exe,dev,doc,nls
 no|advancecomp|advancecomp|exe>dev,dev,doc,nls
 no|alsaequal|libasound2-plugin-equal,caps|exe,dev,doc,nls| #needed by pequalizer.
 yes|alsa-lib|libasound2,libasound2-data,alsa-topology-conf,alsa-ucm-conf|exe,dev,doc,nls||deps:yes
@@ -66,11 +66,13 @@ yes|bluez|bluez,bluez-obexd|exe,dev,doc,nls||deps:yes
 no|boehm-gc|libgc1,libgc-dev|exe,dev,doc,nls||deps:yes
 no|busybox||exe
 yes|bzip2|bzip2,libbz2-1.0|exe,dev,doc,nls||deps:yes
+yes|breeze-cursor-theme|breeze-cursor-theme|exe,dev,doc,nls||deps:yes
 yes|brightnessctl|brightnessctl|exe,dev,doc,nls||deps:yes
 yes|ca-certificates|ca-certificates|exe,dev,doc,nls||deps:yes
 yes|cairo|libcairo2,libcairo2-dev,libcairo-gobject2,libcairo-gobject2,libcairo-script-interpreter2|exe,dev,doc,nls||deps:yes
 yes|ccache|ccache|exe>dev,dev,doc,nls||deps:yes
 no|cdparanoia|cdparanoia,libcdparanoia0,libcdparanoia-dev|exe,dev,doc,nls
+yes|cgpt|cgpt|exe>dev,dev,doc,nls||deps:yes
 no|cifs-utils|cifs-utils|exe,dev,doc,nls
 no|copy-fast||exe,doc,nls
 yes|coreutils|coreutils|exe,dev,doc,nls||deps:yes
@@ -85,14 +87,15 @@ no|cups-filters|cups-filters,cups-filters-core-drivers,libcupsfilters1,libcupsfi
 yes|curl|curl,libcurl4,libcurl4-openssl-dev|exe,dev,doc,nls||deps:yes
 no|cvs|cvs|exe>dev,dev,doc,nls
 yes|cyrus-sasl2|libsasl2-2|exe,dev,doc,nls||deps:yes
-yes|dash|dash|exe>dev,dev,doc,nls||deps:yes
+yes|dash|dash|exe,dev,doc,nls||deps:yes
 yes|dbus|dbus,dbus-x11,libdbus-1-3,libdbus-1-dev,libapparmor1|exe,dev,doc,nls||deps:yes
 yes|dbus-glib|libdbus-glib-1-2|exe,dev,doc,nls||deps:yes
 yes|dbus-user-session|dbus-user-session|exe>null,dev>null,doc>null,nls>null
 yes|d-conf|dconf-gsettings-backend,dconf-service,libdconf1|exe,dev,doc,nls||deps:yes #needed by gsettings-desktop-settings
 #yes|deadbeef|deadbeef,deadbeef-waveform-seekbar,deadbeef-vu-meter,deadbeef-spectrogram,deadbeef-rating,deadbeef-musical-spectrum,deadbeef-infobar|exe|
-yes|debconf|debconf|exe>null,dev>null,doc>null,nls>null
+yes|debconf|debconf|exe,dev,doc,nls
 yes|debianutils|debianutils|exe,dev,doc,nls||deps:yes
+yes|debootstrap|debootstrap|exe>dev,dev,doc,nls||deps:yes
 yes|dejavu_fonts|fonts-dejavu-core,fonts-dejavu-extra|exe,dev,doc,nls||deps:yes
 no|desk_icon_theme_uniform||exe
 no|desk_icon_theme_neon||exe
@@ -152,7 +155,7 @@ no|gamin|gamin,libgamin0,libgamin-dev|exe,dev,doc,nls
 yes|gawk|gawk|exe,dev>null,doc,nls||deps:yes
 yes|gcc_dev|gcc-10-base,gcc,gcc-10,g++,g++-10,cpp,cpp-10|exe>dev,dev,doc,nls||deps:yes #cloog-isl removed
 no|gconf|gconf2-common,gconf2,libgconf-2-4,libgconf2-dev,libgconf-2-4,gconf-service|exe,dev,doc,nls||deps:yes
-yes|gdb|gdb|exe>dev,dev,doc,nls||deps:yes
+yes|gdb|gdb,libboost-regex1.74.0|exe>dev,dev,doc,nls||deps:yes
 yes|gdbm|libgdbm6|exe,dev,doc,nls||deps:yes
 yes|gdk-pixbuf|libgdk-pixbuf-2.0-0,libgdk-pixbuf2.0-common,libgdk-pixbuf-2.0-dev,libgdk-pixbuf2.0-0,libgdk-pixbuf2.0-dev,libgdk-pixbuf-xlib-2.0-0,libgdk-pixbuf-xlib-2.0-dev|exe,dev,doc,nls||deps:yes
 no|gdmap|gdmap|exe,dev>null,doc,nls
@@ -242,7 +245,7 @@ no|inkscapelite||exe,dev,doc,nls
 no|inotify-tools|inotify-tools,libinotifytools0|exe,dev,doc,nls
 yes|installwatch|checkinstall|exe>dev,dev,doc,nls||deps:yes
 yes|intltool|intltool|exe>dev,dev,doc,nls||deps:yes #previously only in devx, but need in main f.s. to run momanager without devx.
-yes|iptables|iptables,libip4tc2,libip6tc2,libxtables12,libnftnl11|exe,dev,doc,nls||deps:yes
+yes|iptables|iptables,libip4tc2,libip6tc2,libxtables12,libnftnl11|exe,dev>exe,doc,nls||deps:yes
 no|iso-codes|iso-codes|exe,dev,doc,nls #needed by gstreamer. very big. GSTREAMER1.0 GSTREAMER0.10
 no|isomaster|isomaster|exe,dev,doc,nls
 yes|iw|iw|exe,dev,doc,nls||deps:yes
@@ -261,7 +264,7 @@ no|lcms2|liblcms2-2,liblcms2-dev,liblcms2-utils|exe,dev,doc,nls
 yes|less|less|exe,dev>null,doc,nls||deps:yes
 no|libaacs|libaacs0,libaacs-dev|exe,dev,doc,nls #mplayer needs this.
 no|libao|libao4,libao-common,libao-dev|exe,dev,doc,nls||deps:yes
-yes|libavcodec|libavcodec58,libavcodec-extra58|exe,dev,doc,nls||deps:yes
+yes|libavcodec|libavcodec58|exe,dev,doc,nls||deps:yes
 no|libappindicator|libappindicator3-1,libappindicator3-dev,libindicator3-7,libindicator3-dev|exe,dev,doc,nls #needs gtk3, needed by transmission. no, using my pet.
 yes|libarchive|libarchive13|exe>dev,dev,doc,nls||deps:yes #needed by cmake.
 no|libart|libart-2.0-2,libart-2.0-dev|exe,dev,doc,nls
@@ -372,6 +375,7 @@ no|librevenge|librevenge-0.0-0,librevenge-dev|exe,dev,doc,nls
 yes|librsvg|librsvg2-2,librsvg2-dev,librsvg2-bin,librsvg2-common|exe,dev,doc,nls||deps:yes #shows gtk3 as dep, but might work without.
 yes|librtmp|librtmp1|exe,dev,doc,nls||deps:yes
 yes|libsamplerate|libsamplerate0|exe,dev,doc,nls||deps:yes
+yes|libseccomp|libseccomp2|exe,dev,doc,nls||deps:yes
 yes|libselinux|libselinux1,libselinux1-dev|exe,dev,doc,nls||deps:yes
 yes|libsepol|libsepol1,libsepol1-dev|exe,dev,doc,nls||deps:yes
 no|libserd|libserd-0-0,libserd-dev|exe,dev,doc,nls
@@ -424,11 +428,12 @@ yes|libxml2-utils|libxml2-utils|exe>dev,dev,doc,nls||deps:yes
 yes|libxshmfence|libxshmfence1,libxshmfence-dev|exe,dev,doc,nls||deps:yes #xorg needs this.
 yes|libxslt|libxslt1.1|exe,dev,doc,nls||deps:yes
 no|libxvmc|libxvmc1,libxvmc-dev|exe,dev,doc,nls||deps:yes #this is actually part of xorg.
+yes|libxxhash|libxxhash0|exe,dev,doc,nls||deps:yes
 yes|libzstd|libzstd1|exe,dev,doc,nls||deps:yes
 no|linux_firmware_dvb||exe
 yes|linux-header|linux-libc-dev|exe>dev,dev,doc,nls||deps:yes
 no|lirc|liblircclient0,liblircclient-dev|exe,dev,doc,nls
-yes|llvm|libllvm11|exe,dev||deps:yes #needed by libgl1-mesa-dri, but huge 7MB deb. i left out dev components. 120605 removed. 120902 back.
+no|llvm|libllvm11|exe,dev||deps:yes #needed by libgl1-mesa-dri, but huge 7MB deb. i left out dev components. 120605 removed. 120902 back.
 yes|login|login|exe>null,dev>null,doc>null,nls>null
 yes|lsb-base|lsb-base|exe,dev,doc,nls||deps:yes
 no|lxrandr||exe,dev,doc,nls
@@ -488,7 +493,7 @@ no|opencv|libopencv-core*,libopencv-imgproc*|exe,dev>null,doc,nls #ffmpeg needs 
 no|openjdk-jre|openjdk-11-jre,openjdk-11-jre-headless,ca-certificates-java,java-common|exe,dev,doc,nls #needed if icedtea selected
 yes|openldap|libldap-2.4-2|exe,dev,doc,nls||deps:yes
 no|opensp|opensp,libosp-dev|exe>dev,dev,doc,nls|+sgml-base,+sgml-data,+xml-core
-no|openssh_client|openssh-client|exe,dev,doc,nls
+yes|openssh-client|openssh-client|exe,dev,doc,nls||deps:yes
 yes|openssl|openssl,libssl1.1,libssl-dev|exe,dev,doc,nls||deps:yes #libssl1.0.2 = older libssl
 no|optipng|optipng|exe>dev,dev,doc,nls
 yes|opus|libopus0|exe,dev,doc,nls||deps:yes #needed by ffmpeg
@@ -502,8 +507,9 @@ no|PackIt||exe,dev
 yes|pam|libpam0g|exe,dev,doc,nls||deps:yes
 yes|pango|libpango-1.0-0,libpango1.0-dev,libpangoft2-1.0-0,libpangocairo-1.0-0,libpangoxft-1.0-0,gir1.2-pango-1.0|exe,dev,doc,nls||deps:yes
 yes|parted|parted|exe,dev,doc,nls||deps:yes
-yes|passwd|passwd|exe>null,dev>null,doc>null,nls>null
+yes|passwd|passwd|exe,dev,doc,nls||deps:yes
 yes|patch|patch|exe>dev,dev,doc,nls||deps:yes
+yes|patchelf|patchelf|exe>dev,dev,doc,nls||deps:yes
 yes|patchutils|patchutils|exe>dev,dev,doc,nls||deps:yes
 yes|pavucontrol|pavucontrol|exe,dev,doc,nls||deps:yes
 no|pbackup||exe
@@ -519,8 +525,8 @@ no|peasyport||exe| #rcrsn51, alternative to superscan.
 no|peasyprint||exe,dev
 no|peasyscale||exe #rcrsn51, jpg image resizer.
 no|peasyscan_pdf_plugin||exe,dev
-yes|perl|perl,perl-base,perl-modules-5.32|exe>dev,dev||deps:yes
-yes|perl_tiny|perl,perl-base,perl-modules-5.32|exe,dev>null,doc,nls||deps:yes
+yes|perl|perl,perl-base,perl-modules-5.32|exe,dev,doc,nls||deps:yes
+no|perl_tiny|perl,perl-base,perl-modules-5.32|exe,dev>null,doc,nls||deps:yes
 no|perl-compress-zlib|libcompress-raw-zlib-perl|exe>dev,dev||deps:yes
 no|perl-digest-sha1|libdigest-sha-perl|exe,dev||deps:yes
 no|perl-extutils-depends|libextutils-depends-perl|exe>dev,dev||deps:yes
@@ -554,6 +560,7 @@ no|pure-ftpd||exe
 no|pwsget||exe
 yes|python|python3,python3-minimal,python3.9-minimal,python3.9,libpython3.9,libpython3.9-stdlib,libpython3.9-minimal,python3-setuptools,python3-wheel,python3-pkg-resources,python3-distutils,python3-lib2to3|exe,dev,doc,nls||deps:yes
 yes|python3-pip|python3-pip|exe>dev,dev,doc,nls||deps:yes
+yes|python3-venv|python3-venv|exe>dev,dev,doc,nls||deps:yes
 no|python-libxml2|python2-libxml2|exe,dev,doc,nls #121022 moved from devx to main f.s.
 no|python-dev|libpython3-dev,libpython3.9-dev,python3-dev,python3.9-dev|exe,dev,doc,nls||deps:yes
 no|qpdf|libqpdf21,libqpdf-dev|exe,dev,doc,nls #needed by cups.
@@ -577,7 +584,7 @@ yes|sed|sed|exe,dev>null,doc,nls||deps:yes
 yes|sensible-utils|sensible-utils|exe>null,dev>null,doc>null,nls>null
 yes|serf|libserf-1-1|exe>dev,dev,doc,nls||deps:yes #needed by svn.
 no|setserial|setserial|exe,dev>null,doc,nls
-yes|sgml-base|sgml-base|exe>dev,dev,doc,nls||deps:yes
+yes|sgml-base|sgml-base|exe,dev,doc,nls||deps:yes
 yes|sgml-data|sgml-data|exe>dev,dev,doc,nls||deps:yes
 yes|shared-mime-info|shared-mime-info|exe,dev,doc,nls||deps:yes
 no|simple-mtpfs||exe,dev,doc,nls #pupmtp
@@ -603,8 +610,9 @@ no|tidy|libtidy5deb1,libtidy-dev|exe,dev,doc,nls #needed by abiword.
 yes|time|time|exe,dev>null,doc,nls||deps:yes
 no|transmission|transmission-gtk,transmission-common|exe,dev,doc,nls
 no|tree|tree|exe,dev,doc,nls
-yes|udev|udev|exe>null,dev>null,doc,nls #fake install
+yes|udev|udev|exe,dev,doc,nls||deps:yes
 no|eudev||exe,dev #pet pkg: replaces udev and libudev
+yes|ucf|ucf|exe,dev,doc,nls||deps:yes
 no|uget|uget,aria2,libc-ares2,libc-ares-dev,libaria2,libaria2-0,libaria2-0-dev|exe,dev,doc,nls
 yes|unclutter|unclutter|exe,dev>null,doc,nls||deps:yes
 yes|unzip|unzip|exe,dev>null,doc,nls||deps:yes
@@ -619,6 +627,7 @@ no|vala|valac,libvala-*|exe>dev,dev,doc>dev,nls
 no|vamps|vamps|exe,dev,doc,nls
 no|vobcopy|vobcopy|exe,dev,doc,nls
 no|vorbis-tools|vorbis-tools|exe,dev,doc,nls
+yes|vboot-kernel-utils|vboot-kernel-utils|exe->dev,dev,doc,nls||deps:yes
 yes|vte|libvte-2.91-0,libvte-2.91-common,libvte-2.91-dev|exe,dev,doc,nls||deps:yes
 yes|wayland|libwayland-client0,libwayland-cursor0,libwayland-server0,libwayland-dev,wayland-protocols,libwayland-bin|exe,dev,doc,nls||deps:yes
 no|wcpufreq||exe,dev| #using this instead of cpu-scaling-ondemand.
@@ -645,7 +654,7 @@ no|xlockmore||exe
 yes|xml-core|xml-core|exe>dev,dev,doc,nls||deps:yes
 yes|xorg_dri|libgl1-mesa-dri,mesa-utils,libglew2.1,libsensors5|exe,dev,doc,nls||deps:yes
 no|xsane||exe
-yes|xserver_xorg|xserver-xorg,xserver-xorg-video-all,xserver-xorg-input-all,xinit|exe,dev,doc,nls||deps:yes
+no|xserver_xorg|xserver-xorg,xserver-xorg-video-all,xserver-xorg-input-all,xinit|exe,dev,doc,nls||deps:yes
 yes|xsltproc|xsltproc|exe>dev,dev,doc,nls||deps:yes
 no|xsoldier|xsoldier|exe,dev>null,doc,nls
 yes|xtrans|xtrans-dev|exe>dev,dev,doc,nls||deps:yes
@@ -676,30 +685,37 @@ yes|gcc_lib|libatomic1,libcc1-0,libgcc-s1,libgomp1,libisl23,libitm1,libquadmath0
 yes|mtools|mtools|exe,dev,doc,nls||deps:yes
 yes|syslinux|syslinux,syslinux-common,syslinux-utils,syslinux-efi,extlinux,isolinux|exe,dev,doc,nls||deps:yes
 yes|vte-gtk2|libvte9,libvte-dev|exe,dev,doc,nls||deps:yes
-yes|xorg_base_new|libglapi-mesa,libx11-xcb1,xfonts-utils,mesa-common-dev,libgl1,libgl1-mesa-dri,x11-xkb-utils,x11-xserver-utils,x11-utils,x11-apps,fontconfig,fontconfig-config,libfontconfig-dev,libdrm2,libdrm-common,libdrm-dev,libdrm-radeon1,libdrm-amdgpu1,libdrm-nouveau2,libdrm-intel1,libepoxy0,libepoxy-dev,libfontconfig1,libfontconfig1-dev,libfontenc1,libfontenc-dev,libgl-dev,libglvnd-dev,libglu1-mesa,libglu1-mesa-dev,libice6,libice-dev,libsm6,libsm-dev,libunwind8,libunwind-dev,libx11-6,libx11-dev,libx11-data,libxau6,libxau-dev,libxaw7,libxcomposite1,libxcomposite-dev,libxcursor1,libxcursor-dev,libxdamage1,libxdamage-dev,libxdmcp6,libxdmcp-dev,libxext6,libxext-dev,libxfixes3,libxfixes-dev,libxfont2,libxfont-dev,libxft2,libxft-dev,libxi6,libxi-dev,libxinerama1,libxkbfile1,libxkbfile-dev,libxmu6,libxmu-dev,libxmuu1,libxpm4,libxpm-dev,libxrandr2,libxrandr-dev,libxrender1,libxrender-dev,libxt6,libxt-dev,libxtst6,libxtst-dev,libxv1,libxxf86dga1,libxxf86vm1,xkb-data,xinput,xbitmaps,xauth,x11-common|exe,dev,doc,nls||deps:yes
+yes|xorg_base_new|libglapi-mesa,libx11-xcb1,xfonts-utils,mesa-common-dev,libgl1,x11-xkb-utils,x11-xserver-utils,x11-utils,x11-apps,fontconfig,fontconfig-config,libfontconfig-dev,libdrm2,libdrm-common,libdrm-dev,libdrm-radeon1,libdrm-amdgpu1,libdrm-nouveau2,libdrm-intel1,libepoxy0,libepoxy-dev,libfontconfig1,libfontconfig1-dev,libfontenc1,libfontenc-dev,libgl-dev,libglvnd-dev,libglu1-mesa,libglu1-mesa-dev,libice6,libice-dev,libsm6,libsm-dev,libunwind8,libunwind-dev,libx11-6,libx11-dev,libx11-data,libxau6,libxau-dev,libxaw7,libxcomposite1,libxcomposite-dev,libxcursor1,libxcursor-dev,libxdamage1,libxdamage-dev,libxdmcp6,libxdmcp-dev,libxext6,libxext-dev,libxfixes3,libxfixes-dev,libxfont2,libxfont-dev,libxft2,libxft-dev,libxi6,libxi-dev,libxinerama1,libxkbfile1,libxkbfile-dev,libxmu6,libxmu-dev,libxmuu1,libxpm4,libxpm-dev,libxrandr2,libxrandr-dev,libxrender1,libxrender-dev,libxt6,libxt-dev,libxtst6,libxtst-dev,libxv1,libxxf86dga1,libxxf86vm1,xkb-data,xinput,xbitmaps,xauth,x11-common|exe,dev,doc,nls||deps:yes
+yes|xserver_xorg|xserver-xorg,xserver-xorg-video-all,xserver-xorg-input-all,xserver-xorg-input-wacom,xserver-xorg-video-intel,xserver-xorg-video-qxl,xinit|exe,dev,doc,nls||deps:yes
 "
     ;;
 x86_64)
     PKGS_SPECS_TABLE="$PKGS_SPECS_TABLE
+yes|connman|connman|exe,dev,doc,nls||deps:yes
+yes|dwarves|dwarves|exe>dev,dev,doc,nls||deps:yes
 yes|efibootmgr|efibootmgr|exe,dev,doc,nls||deps:yes
 yes|gcc_lib|libatomic1,libcc1-0,libgcc-s1,libgomp1,libisl23,libitm1,libquadmath0|exe,dev,doc,nls||deps:yes #libcloog-isl4 and libisl15 removed for Bullseye
+yes|gdisk|gdisk|exe,dev,doc,nls||deps:yes
 yes|gnu-efi|gnu-efi|exe>dev,dev,doc,nls||deps:yes
 yes|mtools|mtools|exe,dev,doc,nls||deps:yes
 yes|syslinux|syslinux,syslinux-common,syslinux-utils,syslinux-efi,extlinux,isolinux|exe,dev,doc,nls||deps:yes
-yes|xorg_base_new|libglapi-mesa,libx11-xcb1,xfonts-utils,mesa-common-dev,libgl1,libgl1-mesa-dri,x11-xkb-utils,x11-xserver-utils,x11-utils,x11-apps,fontconfig,fontconfig-config,libfontconfig-dev,libdrm2,libdrm-common,libdrm-dev,libdrm-radeon1,libdrm-amdgpu1,libdrm-nouveau2,libdrm-intel1,libepoxy0,libepoxy-dev,libfontconfig1,libfontconfig1-dev,libfontenc1,libfontenc-dev,libgl-dev,libglvnd-dev,libglu1-mesa,libglu1-mesa-dev,libice6,libice-dev,libsm6,libsm-dev,libunwind8,libunwind-dev,libx11-6,libx11-dev,libx11-data,libxau6,libxau-dev,libxaw7,libxcomposite1,libxcomposite-dev,libxcursor1,libxcursor-dev,libxdamage1,libxdamage-dev,libxdmcp6,libxdmcp-dev,libxext6,libxext-dev,libxfixes3,libxfixes-dev,libxfont2,libxfont-dev,libxft2,libxft-dev,libxi6,libxi-dev,libxinerama1,libxkbfile1,libxkbfile-dev,libxmu6,libxmu-dev,libxmuu1,libxpm4,libxpm-dev,libxrandr2,libxrandr-dev,libxrender1,libxrender-dev,libxt6,libxt-dev,libxtst6,libxtst-dev,libxv1,libxxf86dga1,libxxf86vm1,xkb-data,xinput,xbitmaps,xauth,x11-common|exe,dev,doc,nls||deps:yes
+yes|xorg_base_new|libglapi-mesa,libx11-xcb1,xfonts-utils,mesa-common-dev,libgl1,x11-xkb-utils,x11-xserver-utils,x11-utils,x11-apps,fontconfig,fontconfig-config,libfontconfig-dev,libdrm2,libdrm-common,libdrm-dev,libdrm-radeon1,libdrm-amdgpu1,libdrm-nouveau2,libdrm-intel1,libepoxy0,libepoxy-dev,libfontconfig1,libfontconfig1-dev,libfontenc1,libfontenc-dev,libgl-dev,libglvnd-dev,libglu1-mesa,libglu1-mesa-dev,libice6,libice-dev,libsm6,libsm-dev,libunwind8,libunwind-dev,libx11-6,libx11-dev,libx11-data,libxau6,libxau-dev,libxaw7,libxcomposite1,libxcomposite-dev,libxcursor1,libxcursor-dev,libxdamage1,libxdamage-dev,libxdmcp6,libxdmcp-dev,libxext6,libxext-dev,libxfixes3,libxfixes-dev,libxfont2,libxfont-dev,libxft2,libxft-dev,libxi6,libxi-dev,libxinerama1,libxkbfile1,libxkbfile-dev,libxmu6,libxmu-dev,libxmuu1,libxpm4,libxpm-dev,libxrandr2,libxrandr-dev,libxrender1,libxrender-dev,libxt6,libxt-dev,libxtst6,libxtst-dev,libxv1,libxxf86dga1,libxxf86vm1,xkb-data,xinput,xbitmaps,xauth,x11-common|exe,dev,doc,nls||deps:yes
+yes|xserver_xorg|xserver-xorg,xserver-xorg-video-all,xserver-xorg-input-all,xserver-xorg-input-wacom,xserver-xorg-video-intel,xserver-xorg-video-qxl,xinit|exe,dev,doc,nls||deps:yes
 "
     ;;
 arm)
     PKGS_SPECS_TABLE="$PKGS_SPECS_TABLE
+yes|connman|connman|exe,dev,doc,nls||deps:yes
 yes|gcc_lib|libatomic1,libcc1-0,libgcc-s1,libgomp1,libisl23|exe,dev,doc,nls||deps:yes #libcloog-isl4 and libisl15 removed for Bullseye
 yes|firmware-brcm80211|firmware-brcm80211|exe
-yes|xorg_base_new|libglapi-mesa,libx11-xcb1,xfonts-utils,mesa-common-dev,libgl1,libgl1-mesa-dri,x11-xkb-utils,x11-xserver-utils,x11-utils,x11-apps,fontconfig,fontconfig-config,libfontconfig-dev,libdrm2,libdrm-common,libdrm-dev,libdrm-radeon1,libdrm-amdgpu1,libdrm-nouveau2,libdrm-etnaviv1,libdrm-exynos1,libdrm-freedreno1,libdrm-omap1,libdrm-tegra0,libepoxy0,libepoxy-dev,libfontconfig1,libfontconfig1-dev,libfontenc1,libfontenc-dev,libgl-dev,libglvnd-dev,libglu1-mesa,libglu1-mesa-dev,libice6,libice-dev,libsm6,libsm-dev,libunwind8,libunwind-dev,libx11-6,libx11-dev,libx11-data,libxau6,libxau-dev,libxaw7,libxcomposite1,libxcomposite-dev,libxcursor1,libxcursor-dev,libxdamage1,libxdamage-dev,libxdmcp6,libxdmcp-dev,libxext6,libxext-dev,libxfixes3,libxfixes-dev,libxfont2,libxfont-dev,libxft2,libxft-dev,libxi6,libxi-dev,libxinerama1,libxkbfile1,libxkbfile-dev,libxmu6,libxmu-dev,libxmuu1,libxpm4,libxpm-dev,libxrandr2,libxrandr-dev,libxrender1,libxrender-dev,libxt6,libxt-dev,libxtst6,libxtst-dev,libxv1,libxxf86dga1,libxxf86vm1,xkb-data,xinput,xbitmaps,xauth,x11-common|exe,dev,doc,nls||deps:yes
+yes|xorg_base_new|libglapi-mesa,libx11-xcb1,xfonts-utils,mesa-common-dev,libgl1,x11-xkb-utils,x11-xserver-utils,x11-utils,x11-apps,fontconfig,fontconfig-config,libfontconfig-dev,libdrm2,libdrm-common,libdrm-dev,libdrm-radeon1,libdrm-amdgpu1,libdrm-nouveau2,libdrm-etnaviv1,libdrm-exynos1,libdrm-freedreno1,libdrm-omap1,libdrm-tegra0,libepoxy0,libepoxy-dev,libfontconfig1,libfontconfig1-dev,libfontenc1,libfontenc-dev,libgl-dev,libglvnd-dev,libglu1-mesa,libglu1-mesa-dev,libice6,libice-dev,libsm6,libsm-dev,libunwind8,libunwind-dev,libx11-6,libx11-dev,libx11-data,libxau6,libxau-dev,libxaw7,libxcomposite1,libxcomposite-dev,libxcursor1,libxcursor-dev,libxdamage1,libxdamage-dev,libxdmcp6,libxdmcp-dev,libxext6,libxext-dev,libxfixes3,libxfixes-dev,libxfont2,libxfont-dev,libxft2,libxft-dev,libxi6,libxi-dev,libxinerama1,libxkbfile1,libxkbfile-dev,libxmu6,libxmu-dev,libxmuu1,libxpm4,libxpm-dev,libxrandr2,libxrandr-dev,libxrender1,libxrender-dev,libxt6,libxt-dev,libxtst6,libxtst-dev,libxv1,libxxf86dga1,libxxf86vm1,xkb-data,xinput,xbitmaps,xauth,x11-common|exe,dev,doc,nls||deps:yes
 "
     ;;
 aarch64)
     PKGS_SPECS_TABLE="$PKGS_SPECS_TABLE
+yes|connman|connman|exe,dev,doc,nls||deps:yes
 yes|gcc_lib|libasan6,libatomic1,libcc1-0,libgcc-s1,libgcc-10-dev,libgomp1,libisl23|exe,dev,doc,nls||deps:yes #libcloog-isl4 and libisl15 removed for Bullseye
-yes|xorg_base_new|libglapi-mesa,libx11-xcb1,xfonts-utils,mesa-common-dev,libgl1,libgl1-mesa-dri,x11-xkb-utils,x11-xserver-utils,x11-utils,x11-apps,fontconfig,fontconfig-config,libfontconfig-dev,libdrm2,libdrm-common,libdrm-dev,libdrm-radeon1,libdrm-amdgpu1,libdrm-nouveau2,libdrm-etnaviv1,libdrm-freedreno1,libdrm-tegra0,libepoxy0,libepoxy-dev,libfontconfig1,libfontconfig1-dev,libfontenc1,libfontenc-dev,libgl-dev,libglvnd-dev,libglu1-mesa,libglu1-mesa-dev,libice6,libice-dev,libsm6,libsm-dev,libunwind8,libunwind-dev,libx11-6,libx11-dev,libx11-data,libxau6,libxau-dev,libxaw7,libxcomposite1,libxcomposite-dev,libxcursor1,libxcursor-dev,libxdamage1,libxdamage-dev,libxdmcp6,libxdmcp-dev,libxext6,libxext-dev,libxfixes3,libxfixes-dev,libxfont2,libxfont-dev,libxft2,libxft-dev,libxi6,libxi-dev,libxinerama1,libxkbfile1,libxkbfile-dev,libxmu6,libxmu-dev,libxmuu1,libxpm4,libxpm-dev,libxrandr2,libxrandr-dev,libxrender1,libxrender-dev,libxt6,libxt-dev,libxtst6,libxtst-dev,libxv1,libxxf86dga1,libxxf86vm1,xkb-data,xinput,xbitmaps,xauth,x11-common|exe,dev,doc,nls||deps:yes
+yes|xorg_base_new|libglapi-mesa,libx11-xcb1,xfonts-utils,mesa-common-dev,libgl1,x11-xkb-utils,x11-xserver-utils,x11-utils,x11-apps,fontconfig,fontconfig-config,libfontconfig-dev,libdrm2,libdrm-common,libdrm-dev,libdrm-radeon1,libdrm-amdgpu1,libdrm-nouveau2,libdrm-etnaviv1,libdrm-freedreno1,libdrm-tegra0,libepoxy0,libepoxy-dev,libfontconfig1,libfontconfig1-dev,libfontenc1,libfontenc-dev,libgl-dev,libglvnd-dev,libglu1-mesa,libglu1-mesa-dev,libice6,libice-dev,libsm6,libsm-dev,libunwind8,libunwind-dev,libx11-6,libx11-dev,libx11-data,libxau6,libxau-dev,libxaw7,libxcomposite1,libxcomposite-dev,libxcursor1,libxcursor-dev,libxdamage1,libxdamage-dev,libxdmcp6,libxdmcp-dev,libxext6,libxext-dev,libxfixes3,libxfixes-dev,libxfont2,libxfont-dev,libxft2,libxft-dev,libxi6,libxi-dev,libxinerama1,libxkbfile1,libxkbfile-dev,libxmu6,libxmu-dev,libxmuu1,libxpm4,libxpm-dev,libxrandr2,libxrandr-dev,libxrender1,libxrender-dev,libxt6,libxt-dev,libxtst6,libxtst-dev,libxv1,libxxf86dga1,libxxf86vm1,xkb-data,xinput,xbitmaps,xauth,x11-common|exe,dev,doc,nls||deps:yes
 "
     ;;
 esac

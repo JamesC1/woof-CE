@@ -40,15 +40,19 @@ jobs:
           - arch: x86_64
             compat-distro: slackware64
             compat-distro-version: "15.0"
-            kernel: 5.10.x-x86_64
+            kernel: 5.15.x-x86_64
           - arch: x86
             compat-distro: slackware
             compat-distro-version: "15.0"
-            kernel: 5.4.x-x86
+            kernel: 5.15.x-x86
           - arch: x86_64
             compat-distro: ubuntu
             compat-distro-version: bionic64
             kernel: 4.19.x-x86_64
+          - arch: x86_64
+            compat-distro: debian
+            compat-distro-version: sid64
+            kernel: 5.15.x-x86_64
           - arch: arm
             compat-distro: debian
             compat-distro-version: bullseye-veyron-speedy
@@ -66,7 +70,7 @@ jobs:
         path: local-repositories
         key: ${{ github.workflow }}-${{ matrix.arch }}-${{ matrix.compat-distro }}-${{ matrix.compat-distro-version }}-local-repositories-${{ github.sha }}
         restore-keys: |
-          ${{ github.workflow }}-local-repositories-
+          ${{ github.workflow }}-${{ matrix.arch }}-${{ matrix.compat-distro }}-${{ matrix.compat-distro-version }}-local-repositories-
     - name: Prepare build environment
       run: |
         [ -f local-repositories/vercmp ] || (curl https://raw.githubusercontent.com/puppylinux-woof-CE/initrd_progs/master/pkg/w_apps_static/w_apps/vercmp.c | gcc -x c -o ../local-repositories/vercmp -)
@@ -98,6 +102,16 @@ jobs:
       run: |
         cd ../woof-out_*
         echo | sudo -E ./2createpackages
+    - name: Choose kernel variant
+      id: choose_kernel_variant
+      run: |
+        cd ../woof-out_*
+        . _00build.conf
+        [ ! -e _00build_2.conf ] || . _00build_2.conf
+        name="kernel-kit-output-usrmerge-${{ matrix.kernel }}"
+        [ "$USR_SYMLINKS" = yes ] || name="kernel-kit-output-${{ matrix.kernel }}"
+        echo "::set-output name=artifact_name::$name"
+      shell: bash
     - name: Get cached kernel-kit output
       uses: dawidd6/action-download-artifact@v2
       with:
@@ -105,7 +119,7 @@ jobs:
         branch: testing
         workflow: kernel-kit.yml
         workflow_conclusion: success
-        name: kernel-kit-output-${{ matrix.kernel }}
+        name: ${{ steps.choose_kernel_variant.outputs.artifact_name }}
         path: output
     - name: Move cached kernel-kit output
       run: sudo mv output ../woof-out_*/kernel-kit/
@@ -132,12 +146,10 @@ jobs:
         key: ${{ github.workflow }}-${{ matrix.arch }}-${{ matrix.compat-distro }}-${{ matrix.compat-distro-version }}-petbuild-output-${{ github.sha }}
         restore-keys: |
           ${{ github.workflow }}-${{ matrix.arch }}-${{ matrix.compat-distro }}-${{ matrix.compat-distro-version }}-petbuild-output-
-    - name: Install x86 3builddistro dependencies
-      if: matrix.arch == 'x86'
+    - name: Install 3builddistro dependencies
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt-get update -qq
-        sudo apt-get install -y --no-install-recommends libuuid1:i386
+        sudo apt-get install -y --no-install-recommends patchelf dc
     - name: Install ARM 3builddistro dependencies
       if: matrix.arch == 'arm'
       run: |
@@ -155,7 +167,7 @@ jobs:
         sudo chown -R root:root petbuild-output
         sudo mv petbuild-{sources,cache,output} ../woof-out_*/
         cd ../woof-out_*
-        sudo -E HOME=/root ./3builddistro
+        sudo -E HOME=/root XDG_CONFIG_HOME=/root/.config ./3builddistro
         sudo mv petbuild-{sources,cache,output} $GITHUB_WORKSPACE/
     - name: Move build output
       run: |

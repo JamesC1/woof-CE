@@ -60,7 +60,8 @@
 <Key mask="CA" key="Up">udesktop</Key>
 <Key mask="CA" key="Down">ddesktop</Key>
 
-<Key mask="A" key="Tab">next</Key>
+<Key mask="A" key="Tab">nextstacked</Key>
+<Key mask="AS" key="Tab">prevstacked</Key>
 <Key mask="A" key="F4">close</Key>
 <Key mask="A" key="F10">maximize</Key>
 <Key mask="A" key="F6">minimize</Key>
@@ -73,6 +74,7 @@
 <Key mask="A" key="space">window</Key>
 
 <Key mask="CA" key="Delete">exec:defaultprocessmanager</Key>
+<Key mask="CS" key="Escape">exec:defaultprocessmanager</Key>
 
 <!-- http://wiki.linuxquestions.org/wiki/XF86_keyboard_symbols -->
 <Key key="XF86AudioMute">exec:pactl set-sink-mute @DEFAULT_SINK@ toggle || amixer sset Master toggle</Key>
